@@ -11,9 +11,11 @@ namespace yahboom.car
     {
         public const int BufferSize = 50;
         WebSocket socket;
+        SmartCar smartCar;
         SocketHandler(WebSocket socket)
         {
             this.socket = socket;
+            this.smartCar = new SmartCar();
         }
         async Task EchoLoop()
         {
@@ -23,6 +25,10 @@ namespace yahboom.car
             {
                 var incoming = await this.socket.ReceiveAsync(seg, CancellationToken.None);
                 var outgoing = new ArraySegment<byte>(buffer, 0, incoming.Count);
+
+                var cmd = System.Text.UTF8Encoding.Default.GetString(buffer, 0,incoming.Count);
+                this.smartCar.Execute(cmd);
+
                 await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
             }
         }

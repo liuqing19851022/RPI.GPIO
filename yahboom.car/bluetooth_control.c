@@ -41,8 +41,7 @@
 #define ON  1
 #define OFF 0
 
-#define HIGH 1
-#define LOW  0
+
 
 /*小车运行状态枚举*/
 enum {
@@ -70,14 +69,7 @@ enum {
 
 
 //定义引脚
-int Left_motor_go = 28;       //左电机前进AIN2连接Raspberry的wiringPi编码28口
-int Left_motor_back = 29;     //左电机后退AIN1连接Raspberry的wiringPi编码29口
 
-int Right_motor_go = 24;      //右电机前进BIN2连接Raspberry的wiringPi编码24口
-int Right_motor_back = 25;    //右电机后退BIN1连接Raspberry的wiringPi编码25口
-
-int Left_motor_pwm = 27;      //左电机控速PWMA连接Raspberry的wiringPi编码27口
-int Right_motor_pwm = 23;     //右电机控速PWMB连接Raspberry的wiringPi编码23口
 
 /*循迹红外传感器引脚及变量设置*/
 //TrackSensorLeftPin1 TrackSensorLeftPin2 TrackSensorRightPin1 TrackSensorRightPin2
@@ -128,10 +120,7 @@ int ServoLeftRightPin = 14;
 int EchoPin = 30;         //定义回声脚为连接Raspberry的wiringPi编码30口
 int TrigPin = 31;         //定义触发脚为连接Raspberry的wiringPi编码31口
 
-/*RGBLED引脚设置*/
-int LED_R = 3;           //LED_R接在Raspberry上的wiringPi编码3口
-int LED_G = 2;           //LED_G接在Raspberry上的wiringPi编码2口
-int LED_B = 5;           //LED_B接在Raspberry上的wiringPi编码5口
+
 
 /*灭火电机引脚设置*/
 int OutfirePin = 8;      //设置灭火电机引脚为wiringPi编码8口
@@ -575,213 +564,9 @@ void follow_light_test()
   return;
 }
 
-/**
-* Function       run
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车前进
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void run(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机前进
-  digitalWrite(Left_motor_go, HIGH);   //左电机前进使能
-  digitalWrite(Left_motor_back, LOW);  //左电机后退禁止
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机前进
-  digitalWrite(Right_motor_go, HIGH);  //右电机前进使能
-  digitalWrite(Right_motor_back, LOW); //右电机后退禁止
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       brake
-*  @author        Danny
-* @date          2017.08.16
-* @brief         小车刹车
-* @param[in]     void
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void brake()
-{
-  digitalWrite(Left_motor_go, LOW);
-  digitalWrite(Left_motor_back, LOW);
-  digitalWrite(Right_motor_go, LOW);
-  digitalWrite(Right_motor_back, LOW);
-}
-
-/**
-* Function       left
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车左转(左轮不动,右轮前进)
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void left(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机停止
-  digitalWrite(Left_motor_go, LOW);     //左电机前进禁止
-  digitalWrite(Left_motor_back, LOW);   //左电机后退禁止
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机前进
-  digitalWrite(Right_motor_go, HIGH);  //右电机前进使能
-  digitalWrite(Right_motor_back, LOW); //右电机后退禁止
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       spin_left
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车原地左转(左轮后退，右轮前进)
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void spin_left(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机后退
-  digitalWrite(Left_motor_go, LOW);     //左电机前进禁止
-  digitalWrite(Left_motor_back, HIGH);  //左电机后退使能
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机前进
-  digitalWrite(Right_motor_go, HIGH);  //右电机前进使能
-  digitalWrite(Right_motor_back, LOW); //右电机后退禁止
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       right
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车右转(左轮前进,右轮不动)
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void right(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机前进
-  digitalWrite(Left_motor_go, HIGH);    //左电机前进使能
-  digitalWrite(Left_motor_back, LOW);   //左电机后退禁止
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机停止
-  digitalWrite(Right_motor_go, LOW);    //右电机前进禁止
-  digitalWrite(Right_motor_back, LOW);  //右电机后退禁止
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       spin_right
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车原地右转(右轮后退，左轮前进)
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void spin_right(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机前进
-  digitalWrite(Left_motor_go, HIGH);    //左电机前进使能
-  digitalWrite(Left_motor_back, LOW);   //左电机后退禁止
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机后退
-  digitalWrite(Right_motor_go, LOW);    //右电机前进禁止
-  digitalWrite(Right_motor_back, HIGH); //右电机后退使能
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       back
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车后退
-* @param[in1]    LeftCarSpeedControl:左轮速度
-* @param[in2]    RightCarSpeedControl：右轮速度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void back(unsigned int LeftCarSpeedControl,unsigned int RightCarSpeedControl)
-{
-  //左电机后退
-  digitalWrite(Left_motor_go, LOW);     //左电机前进禁止
-  digitalWrite(Left_motor_back, HIGH);  //左电机后退使能
-  softPwmWrite(Left_motor_pwm, LeftCarSpeedControl);
-
-  //右电机后退
-  digitalWrite(Right_motor_go, LOW);    //右电机前进禁止
-  digitalWrite(Right_motor_back, HIGH); //右电机后退使能
-  softPwmWrite(Right_motor_pwm, RightCarSpeedControl);
-}
-
-/**
-* Function       whistle
-* @author        Danny
-* @date          2017.08.16
-* @brief         小车鸣笛
-* @param[in]     void
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void whistle()
-{
-  digitalWrite(buzzer, LOW);   //发声音
-  delay(100);                  //延时100ms
-  digitalWrite(buzzer, HIGH);  //不发声音
-  delay(1);                    //延时1ms
-
-  digitalWrite(buzzer, LOW);   //发声音
-  delay(200);                  //延时200ms
-  digitalWrite(buzzer, HIGH);  //不发声音
-  delay(2);                    //延时2ms
-  return;
-}
 
 
 
-/**
-* Function       color_led_pwm
-* @author        Danny
-* @date          2017.08.16
-* @brief         七彩灯亮指定的颜色
-* @param[in1]    v_iRed:指定的颜色值（0-255）
-* @param[in2]    v_iGreen:指定的颜色值（0-255）
-* @param[in3]    v_iBlue:指定的颜色值（0-255）
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void color_led_pwm(int v_iRed, int v_iGreen, int v_iBlue)
-{
-  softPwmWrite(LED_R, v_iRed);
-  softPwmWrite(LED_G, v_iGreen);
-  softPwmWrite(LED_B, v_iBlue);
-  return;
-}
 
 /***********模式2 巡线模式*************/
 /**

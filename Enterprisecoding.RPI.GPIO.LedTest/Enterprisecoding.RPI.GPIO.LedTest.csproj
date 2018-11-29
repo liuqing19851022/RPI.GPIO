@@ -5,6 +5,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <ServerGarbageCollection>true</ServerGarbageCollection>
 	<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+	<AssemblyName>LedTest</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Enterprisecoding.RPI.GPIO\Enterprisecoding.RPI.GPIO.csproj" />

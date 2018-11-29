@@ -25,11 +25,17 @@ namespace yahboom.car
             {
                 var incoming = await this.socket.ReceiveAsync(seg, CancellationToken.None);
                 var outgoing = new ArraySegment<byte>(buffer, 0, incoming.Count);
+                try
+                {
+                    var cmd = System.Text.UTF8Encoding.Default.GetString(buffer, 0, incoming.Count);
+                    this.smartCar.Execute(cmd);
+                    await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                catch {
 
-                var cmd = System.Text.UTF8Encoding.Default.GetString(buffer, 0,incoming.Count);
-                this.smartCar.Execute(cmd);
+                }
 
-                await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
+                
             }
         }
         static async Task Acceptor(HttpContext hc, Func<Task> n)

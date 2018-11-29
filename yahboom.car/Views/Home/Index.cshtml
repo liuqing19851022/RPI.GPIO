@@ -4,7 +4,7 @@
 
 @section Scripts{
     <script type="text/javascript">
-        var ws = new WebSocket("ws://localhost:5000/ws");
+        var ws = new WebSocket("ws://" + window.location.host + "/ws");
         ws.onopen = function () {
             console.log("open");
             ws.send("hello");
@@ -30,10 +30,10 @@
 <div class="row">
     <div class="col-md-3">
         <div id="body">
-            <a href="$1,0,0,0,0,0,0,0,0#">前</a>
-            <a href="$2,0,0,0,0,0,0,0,0#">后</a>
-            <a href="$3,0,0,0,0,0,0,0,0#">左</a>
-            <a href="$4,0,0,0,0,0,0,0,0#">右</a>
+            <a href="run">前</a>
+            <a href="back">后</a>
+            <a href="left">左</a>
+            <a href="right">右</a>
         </div>
 
 

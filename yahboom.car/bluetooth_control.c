@@ -71,13 +71,7 @@ enum {
 //定义引脚
 
 
-/*循迹红外传感器引脚及变量设置*/
-//TrackSensorLeftPin1 TrackSensorLeftPin2 TrackSensorRightPin1 TrackSensorRightPin2
-//      9                  21                  7                   1
-const int TrackSensorLeftPin1  =  9;    //定义左边第一个循迹红外传感器引脚为wiringPi编码9口
-const int TrackSensorLeftPin2  =  21;  //定义左边第二个循迹红外传感器引脚为wiringPi编码21口
-const int TrackSensorRightPin1 =  7;   //定义右边第一个循迹红外传感器引脚为wiringPi编码7口
-const int TrackSensorRightPin2 =  1;   //定义右边第二个循迹红外传感器引脚为wiringPi编码1口
+
 
 //定义各个循迹红外引脚采集的数据的变量
 int TrackSensorLeftValue1;
@@ -86,9 +80,7 @@ int TrackSensorRightValue1;
 int TrackSensorRightValue2;
 char infrared_track_value[5] = {0};
 
-/*避障红外传感器引脚及变量设置*/
-const int AvoidSensorLeft =  26; //定义左边避障的红外传感器引脚为wiringPi编码26口
-const int AvoidSensorRight = 0;  //定义右边避障的红外传感器引脚为wiringPi编码0口
+
 
 int LeftSensorValue ;            //定义变量来保存红外传感器采集的数据大小
 int RightSensorValue ;
@@ -122,8 +114,7 @@ int TrigPin = 31;         //定义触发脚为连接Raspberry的wiringPi编码31
 
 
 
-/*灭火电机引脚设置*/
-int OutfirePin = 8;      //设置灭火电机引脚为wiringPi编码8口
+
 
 /*变量*/
 /*摄像头舵机上下和左右两个自由度的变量*/
@@ -1590,26 +1581,8 @@ int main()
   //wiringPi初始化
   wiringPiSetup();
   digitalWrite(OutfirePin, HIGH); 
-  //初始化电机驱动IO为输出方式
-  pinMode(Left_motor_go, OUTPUT);
-  pinMode(Left_motor_back, OUTPUT);
-  pinMode(Right_motor_go, OUTPUT);
-  pinMode(Right_motor_back, OUTPUT);
   
-  //创建两个软件控制的PWM脚
-  softPwmCreate(Left_motor_pwm,0,255); 
-  softPwmCreate(Right_motor_pwm,0,255);
 
-  //定义左右传感器为输入接口
-  pinMode(AvoidSensorLeft, INPUT);
-  pinMode(AvoidSensorRight, INPUT);
-  
-  //定义寻迹红外传感器为输入模式
-  pinMode(TrackSensorLeftPin1, INPUT);
-  pinMode(TrackSensorLeftPin2, INPUT);
-  pinMode(TrackSensorRightPin1, INPUT);
-  pinMode(TrackSensorRightPin2, INPUT);
-  
   //定义光敏电阻引脚为输入模式
   pinMode(LdrSensorLeft, INPUT);
   pinMode(LdrSensorRight, INPUT);

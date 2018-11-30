@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace yahboom.car
                 var outgoing = new ArraySegment<byte>(buffer, 0, incoming.Count);
                 try
                 {
-                    var cmd = System.Text.UTF8Encoding.Default.GetString(buffer, 0, incoming.Count);
+                    var cmd = Encoding.UTF8.GetString(buffer, 0, incoming.Count);
                     this.smartCar.Execute(cmd);
                     await this.socket.SendAsync(outgoing, WebSocketMessageType.Text, true, CancellationToken.None);
                 }

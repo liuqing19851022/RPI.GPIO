@@ -11,6 +11,9 @@ namespace yahboom.car
     {
 
         //定义引脚
+        /*灭火电机引脚设置*/
+        const int OutfirePin = 8;      //设置灭火电机引脚为wiringPi编码8口
+
         const int Left_motor_go = 28;       //左电机前进AIN2连接Raspberry的wiringPi编码28口
         const int Left_motor_back = 29;     //左电机后退AIN1连接Raspberry的wiringPi编码29口
 
@@ -27,11 +30,45 @@ namespace yahboom.car
         const int LED_G = 2;           //LED_G接在Raspberry上的wiringPi编码2口
         const int LED_B = 5;           //LED_B接在Raspberry上的wiringPi编码5口
 
+        /*避障红外传感器引脚及变量设置*/
+        const int AvoidSensorLeft = 26; //定义左边避障的红外传感器引脚为wiringPi编码26口
+        const int AvoidSensorRight = 0;  //定义右边避障的红外传感器引脚为wiringPi编码0口
+
+        /*循迹红外传感器引脚及变量设置*/
+        const int TrackSensorLeftPin1 = 9;    //定义左边第一个循迹红外传感器引脚为wiringPi编码9口
+        const int TrackSensorLeftPin2 = 21;  //定义左边第二个循迹红外传感器引脚为wiringPi编码21口
+        const int TrackSensorRightPin1 = 7;   //定义右边第一个循迹红外传感器引脚为wiringPi编码7口
+        const int TrackSensorRightPin2 = 1;   //定义右边第二个循迹红外传感器引脚为wiringPi编码1口
 
         const uint HIGH = 1;
         const uint LOW = 0;
 
         int CurrnetSpeed = 100;
+
+        public SmartCar() {
+            WiringPi.Core.Setup();
+            digitalWrite(OutfirePin, HIGH);
+            //初始化电机驱动IO为输出方式
+            pinMode(Left_motor_go, PinMode.Output);
+            pinMode(Left_motor_back, PinMode.Output);
+            pinMode(Right_motor_go, PinMode.Output);
+            pinMode(Right_motor_back, PinMode.Output);
+
+            //创建两个软件控制的PWM脚
+            //softPwmCreate(Left_motor_pwm, 0, 255);
+            //softPwmCreate(Right_motor_pwm, 0, 255);
+
+            //定义左右传感器为输入接口
+            pinMode(AvoidSensorLeft, PinMode.Input);
+            pinMode(AvoidSensorRight, PinMode.Input);
+
+            //定义寻迹红外传感器为输入模式
+            pinMode(TrackSensorLeftPin1, PinMode.Input);
+            pinMode(TrackSensorLeftPin2, PinMode.Input);
+            pinMode(TrackSensorRightPin1, PinMode.Input);
+            pinMode(TrackSensorRightPin2, PinMode.Input);
+
+        }
 
 
         public void Execute(string cmd) {
@@ -59,6 +96,13 @@ namespace yahboom.car
 
         }
 
+        //private void softPwmCreate(PinMode, n1, n2) {
+        //    WiringPi.Core.pw
+        //}
+
+        private void pinMode(int pin, PinMode mode) {
+            WiringPi.Core.PinMode(pin, mode);
+        }
 
         private void softPwmWrite(int pin, int val)
         {

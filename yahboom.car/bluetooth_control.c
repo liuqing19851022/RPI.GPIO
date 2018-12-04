@@ -86,9 +86,7 @@ int LeftSensorValue ;            //定义变量来保存红外传感器采集的
 int RightSensorValue ;
 char infrared_avoid_value[3] = {0};
 
-/*定义光敏电阻引脚及变量设置*/
-const int LdrSensorLeft =  11;   //定义左边光敏电阻引脚为wiringPi编码11口
-const int LdrSensorRight = 22;   //定义右边光敏电阻引脚为wiringPi编码22口
+
 
 int LdrSersorLeftValue ;         //定义变量来保存光敏电阻采集的数据大小
 int LdrSersorRightValue ;
@@ -102,15 +100,10 @@ int buzzer = 10;                //设置控制蜂鸣器引脚为wiringPi编码10
 unsigned int g_CarSpeedControl = 150;
 
 
-/*设置舵机驱动引脚*/
-int FrontServoPin = 4;
-int ServoUpDownPin = 13;
-int ServoLeftRightPin = 14;
 
 
-/*超声波引脚及变量设置*/
-int EchoPin = 30;         //定义回声脚为连接Raspberry的wiringPi编码30口
-int TrigPin = 31;         //定义触发脚为连接Raspberry的wiringPi编码31口
+
+
 
 
 
@@ -159,29 +152,7 @@ float Distance_test();
 void bubble(unsigned long *,int );
 void Servo_Control_Thread(void);
 
-/**
-* Function       servo_pulse
-* @author        Danny
-* @date          2017.08.16
-* @brief         定义一个脉冲函数，用来模拟方式产生PWM值
-*                时基脉冲为20ms,该脉冲高电平部分在0.5-2.5ms
-*                控制0-180度
-* @param[in1]    ServPin:舵机控制引脚
-* @param[in2]    myangle:舵机转动指定的角度
-* @param[out]    void
-* @retval        void
-* @par History   无
-*/
-void servo_pulse(int v_iServoPin, int myangle)
-{
-  int PulseWidth;                    //定义脉宽变量
-  PulseWidth = (myangle * 11) + 500; //将角度转化为500-2480 的脉宽值
-  digitalWrite(v_iServoPin, HIGH);      //将舵机接口电平置高
-  delayMicroseconds(PulseWidth);     //延时脉宽值的微秒数
-  digitalWrite(v_iServoPin, LOW);       //将舵机接口电平置低
-  delay(20 - PulseWidth / 1000);     //延时周期内剩余时间
-  return;
-}
+
 /**
 * Function       servo_appointed_detection
 * @author        Danny
@@ -1577,45 +1548,12 @@ void Servo_Control_Thread(void)
 */
 int main()
 {
-  g_modeSelect = 1;
-  //wiringPi初始化
-  wiringPiSetup();
-  digitalWrite(OutfirePin, HIGH); 
+
+
+
+
   
-
-  //定义光敏电阻引脚为输入模式
-  pinMode(LdrSensorLeft, INPUT);
-  pinMode(LdrSensorRight, INPUT);
-  
-  //初始化蜂鸣器IO为输出方式
-  pinMode(buzzer, OUTPUT);
-  digitalWrite(buzzer, HIGH);
-  
-
-  //初始化超声波引脚模式
-  pinMode(EchoPin, INPUT);   //定义超声波输入脚
-  pinMode(TrigPin, OUTPUT);  //定义超声波输出脚
-
-  //定义灭火IO口为输出模式并初始化
-  pinMode(OutfirePin, OUTPUT);
-
-  //初始化RGB三色LED的IO口为输出方式，并初始化
-  pinMode(LED_R, OUTPUT);
-  pinMode(LED_G, OUTPUT);
-  pinMode(LED_B, OUTPUT);
-
-  softPwmCreate(LED_R,0,255); 
-  softPwmCreate(LED_G,0,255); 
-  softPwmCreate(LED_B,0,255); 
-
-  //初始化舵机引脚为输出模式
-  pinMode(FrontServoPin, OUTPUT);
-    //初始化舵机引脚为输出模式
-  pinMode(FrontServoPin, OUTPUT);
-  pinMode(ServoUpDownPin, OUTPUT);
-  pinMode(ServoLeftRightPin, OUTPUT);
-    //舵机位置初始化
-  servo_init();
+    
 	
   //打开串口设备，如若失败则会打印错误信息
   if ((fd = serialOpen("/dev/ttyAMA0", 9600)) < 0)

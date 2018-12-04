@@ -52,7 +52,7 @@ namespace Com.Enterprisecoding.RPI.GPIO {
             [DllImport("libwiringPi.so", EntryPoint = "digitalRead")]
             private static extern int DigitalReadInt(int pin);
 
-            private static DigitalValue DigitalRead(int pin) {
+            public static DigitalValue DigitalRead(int pin) {
                 return (DigitalValue)DigitalReadInt(pin);
             }
 
@@ -77,6 +77,9 @@ namespace Com.Enterprisecoding.RPI.GPIO {
 
             [DllImport("libwiringPi.so", EntryPoint = "wiringPiNewNode")]
             public static extern WiringPiNode NewNode(int pinBase, int numPins);
+
+            [DllImport("libwiringPi.so", EntryPoint = "softPwmCreate")]
+            public static extern void SoftPwmCreate(int pin,int min,int max);
         }
 
         public static class OnBoardHardware {
